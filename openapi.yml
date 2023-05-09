@@ -1,38 +1,114 @@
-openapi: 3.0.0
 info:
-  title: Itynerantys API
-  description: API para gerenciar usuarios e eventos do sistema da itynerantys
-  version: 1.0.0
+  version: "1.0.0"
+  title: "API de Usuários"
+  description: "API para gerenciamento de usuários do sistema Itynerantys"
+
+schemes:
+  - "http"
+  - "https"
+
+basePath: "https://itybackend-api.onrender.com"
+
 paths:
   /users:
     get:
-      summary: Retorna uma lista de usuários
-      parameters:
-        - name: limit
-          in: query
-          description: Número máximo de usuários a retornar
-          required: false
-          schema:
-            type: integer
+      summary: "Obter todos os usuários"
+      description: "Retorna uma lista com todos os usuários cadastrados no sistema."
+      produces:
+        - "application/json"
       responses:
-        '200':
-          description: Lista de usuários
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      description: ID do usuário
-                    name:
-                      type: string
-                      description: Nome do usuário
-                    email:
-                      type: string
-                      description: E-mail do usuário
-                    createdAt:
-                      type: string
-                      description: Data de criação do usuário
+        "200":
+          description: "Operação realizada com sucesso"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        "500":
+          description: "Erro interno do servidor"
+    post:
+      summary: "Criar um novo usuário"
+      description: "Cria um novo usuário no sistema."
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Dados do novo usuário"
+          required: true
+          schema:
+            $ref: "#/definitions/UserCreateInput"
+      responses:
+        "200":
+          description: "Operação realizada com sucesso"
+          schema:
+            $ref: "#/definitions/User"
+        "400":
+          description: "Requisição inválida"
+        "500":
+          description: "Erro interno do servidor"
+
+  /users/{id}:
+    get:
+      summary: "Obter um usuário pelo ID"
+      description: "Retorna os dados de um usuário com base no ID informado."
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID do usuário a ser recuperado"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Operação realizada com sucesso"
+          schema:
+            $ref: "#/definitions/User"
+        "404":
+          description: "Usuário não encontrado"
+        "500":
+          description: "Erro interno do servidor"
+    put:
+      summary: "Atualizar um usuário"
+      description: "Atualiza os dados de um usuário existente."
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID do usuário a ser atualizado"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Dados atualizados do usuário"
+          required: true
+          schema:
+            $ref: "#/definitions/UserCreateInput"
+      responses:
+        "200":
+          description: "Operação realizada com sucesso"
+          schema:
+            $ref: "#/definitions/User"
+        "404":
+          description: "Usuário não encontrado"
+        "500":
+          description: "Erro interno do servidor"
+    delete:
+      summary: "Excluir um usuário"
+      description: "Remove um usuário existente do sistema."
+      produces:
+        - "application/json"
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "ID do usuário a ser excluído"
+          required: true
+          type: "string"
+      responses:
+        "200":
+          description: "Operação realizada com sucesso"
+          schema:
+            $ref: "#/definitions/User"
+        "404":
+          description: "Usuário não encontrado
