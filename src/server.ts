@@ -1,36 +1,28 @@
-import { PrismaClient } from "@prisma/client";
-import fastify from "fastify";
-import { z } from 'zod'
+const express = require('express')
+import { PrismaClient } from '@prisma/client';
 
-const app = fastify()
+const prisma = new PrismaClient();
+const app = express();
 
-const prisma = new PrismaClient()
+app.use(express.json());
+
+//routes
+import userRoute from './routes/userRoute';
 
 
-app.get('/users', async  () => {
-    const users = await prisma.user.findMany()
+app.use('/users',userRoute);
 
-    return { users }
-})
 
-app.post('/users', async (request, reply) => {
-    const createUserSchema = z.object({
-        name: z.string(),
-        email: z.string().email(),
-    })
- 
-    const { name , email } = createUserSchema.parse(request.body)
 
-    await prisma.user.create({
-        data: {
-            name,
-            email,
-        }
-    })
 
-    return reply.status(201).send()
-})
 
+
+
+
+
+
+
+export { app, prisma };
 
 app.listen({
     host: '0.0.0.0',
