@@ -1,0 +1,38 @@
+openapi: 3.0.0
+info:
+  title: Itynerantys API
+  description: API para gerenciar usuarios e eventos do sistema da itynerantys
+  version: 1.0.0
+paths:
+  /users:
+    get:
+      summary: Retorna uma lista de usuários
+      parameters:
+        - name: limit
+          in: query
+          description: Número máximo de usuários a retornar
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Lista de usuários
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: ID do usuário
+                    name:
+                      type: string
+                      description: Nome do usuário
+                    email:
+                      type: string
+                      description: E-mail do usuário
+                    createdAt:
+                      type: string
+                      description: Data de criação do usuário
